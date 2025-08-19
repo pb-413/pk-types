@@ -295,7 +295,16 @@ class CombinedPKType:
         Returns the header for the combined type table.
         """
         return f"{'Ratio':<6} | {'Type':<20} | {'Res':<4} | {'Weak':<4} | {'Resistances Details':<59} | {'Weaknesses Details':<30}"
-    
+
+    @staticmethod
+    def all_combos():
+        all = set()
+        for type_1 in PKType:
+            for type_2 in PKType:
+                combo = CombinedPKType(type_1, type_2)
+                all.add(combo)
+        return all
+
     @staticmethod
     def print_all_types_and_combos():
         """
@@ -303,12 +312,7 @@ class CombinedPKType:
         """
         print(CombinedPKType.header())
         print('-' * 123)
-        all = set()
-        for type_1 in PKType:
-            for type_2 in PKType:
-                combo = CombinedPKType(type_1, type_2)
-                all.add(combo)
-        all = list(all)
+        all = list(CombinedPKType.all_combos())
         all.sort(key=lambda x: x.ratio(), reverse=True)
         combo : CombinedPKType
         for combo in all:

@@ -219,7 +219,8 @@ class CombinedPKType:
         # Be peremissive with type_2 being None for single types.
         # Also permit type_2 as the same type as type_1.
         types = [type_1]
-        if type_2 is not None:
+        no_second_type = type_2 is None or type_1 == type_2
+        if not no_second_type:
             types.append(type_2)
         types.sort(key=lambda x: x.name)  # Sort to ensure consistent ordering
         self.types = types
@@ -227,6 +228,14 @@ class CombinedPKType:
     
     def __str__(self):
         return self.name
+
+    def __hash__(self):
+        return hash(tuple(self.types))
+
+    def __eq__(self, other):
+        if not isinstance(other, CombinedPKType):
+            return False
+        return self.types == other.types
 
     def __repr__(self):
         return f"CombinedPKType({', '.join(t.name for t in self.types)})"

@@ -58,6 +58,27 @@ def _subset_gt_lt_one(damage_dict: dict[str, float], threshold: float, gt: bool 
     else:
         return {k: v for k, v in damage_dict.items() if v < threshold}
 
+type_code = {
+    'NORMAL': 'NRM',
+    'FIRE': 'FIR',
+    'WATER': 'WTR',
+    'GRASS': 'GRS',
+    'BUG': 'BUG',
+    'POISON': 'PSN',
+    'ELECTRIC': 'ELC',
+    'GROUND': 'GRD',
+    'FIGHTING': 'FGT',
+    'PSYCHIC': 'PSY',
+    'ROCK': 'RCK',
+    'GHOST': 'GHT',
+    'ICE': 'ICE',
+    'DRAGON': 'DRG',
+    'DARK': 'DRK',
+    'STEEL': 'STL',
+    'FLYING': 'FLY',
+    'FAIRY': 'FRY',
+}
+
 class PKType(Enum):
     NORMAL = auto()
     FIRE = auto()
@@ -77,6 +98,9 @@ class PKType(Enum):
     DARK = auto()
     STEEL = auto()
     FAIRY = auto()
+
+    def code(self) -> str:
+        return type_code[self.name]
 
     def resistances(self) -> dict['PKType', float]:
         """
@@ -250,20 +274,27 @@ class CombinedPKType:
             self.weaknesses(),
         ]
 
-    def print_as_table_row(self):
-        """
-        Prints the combined type as a table row.
-        """
+    def print_as_table_row_verbose(self):
         resistances = ', '.join([f"{k.name} ({v})" for k, v in self.resistances().items()])
         weaknesses = ', '.join([f"{k.name} ({v})" for k, v in self.weaknesses().items()])
-        return f"{self.ratio():<6.2f} | {self.name:<20} | {len(self.resistances()):<5} | {len(self.weaknesses()):<5} | {resistances:<30} | {weaknesses:<30}"
+        return f"{self.ratio():<6.2f} | {self.name:<20} | {len(self.resistances()):<4} | {len(self.weaknesses()):<4} | {resistances:<59} | {weaknesses:<30}"
+
+    def print_as_table_row_quiet(self):
+        resistances = ', '.join([f"{k.name}" for k in self.resistances().keys()])
+        weaknesses = ', '.join([f"{k.name}" for k in self.weaknesses().keys()])
+        return f"{self.ratio():<6.2f} | {self.name:<20} | {len(self.resistances()):<4} | {len(self.weaknesses()):<4} | {resistances:<59} | {weaknesses:<30}"
+
+    def print_as_table_row_codes(self):
+        resistances = ', '.join([f"{k.code()}" for k in self.resistances().keys()])
+        weaknesses = ', '.join([f"{k.code()}" for k in self.weaknesses().keys()])
+        return f"{self.ratio():<6.2f} | {self.name:<20} | {len(self.resistances()):<4} | {len(self.weaknesses()):<4} | {resistances:<59} | {weaknesses:<30}"
 
     @staticmethod
     def header():
         """
         Returns the header for the combined type table.
         """
-        return f"{'Ratio':<6} | {'Type':<20} | {'Resistances':<5} | {'Weaknesses':<5} | {'Resistances Details':<30} | {'Weaknesses Details':<30}"
+        return f"{'Ratio':<6} | {'Type':<20} | {'Res':<4} | {'Weak':<4} | {'Resistances Details':<59} | {'Weaknesses Details':<30}"
     
     @staticmethod
     def print_all_types_and_combos():
@@ -271,7 +302,7 @@ class CombinedPKType:
         Prints all types and their combinations in a table format.
         """
         print(CombinedPKType.header())
-        print('-' * 50)
+        print('-' * 123)
         all = set()
         for type_1 in PKType:
             for type_2 in PKType:
@@ -279,8 +310,11 @@ class CombinedPKType:
                 all.add(combo)
         all = list(all)
         all.sort(key=lambda x: x.ratio(), reverse=True)
+        combo : CombinedPKType
         for combo in all:
-            print(combo.print_as_table_row())
+            # print(combo.print_as_table_row_verbose())
+            # print(combo.print_as_table_row_quiet())
+            print(combo.print_as_table_row_codes())
 
     def resistances(self):
         """

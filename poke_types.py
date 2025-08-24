@@ -1,52 +1,14 @@
 from enum import Enum, auto
 
-damage_multiplier = {
-    # https://bulbapedia.bulbagarden.net/wiki/Type/Type_chart
-    # Attack Type : {
-    #     Defending Type: Multiplier
-    # }
-    'NORMAL':   { 'ghost':0, 'rock': 0.5, 'steel': 0.5 },
-    'FIGHTING': { 'normal': 2, 'flying': 0.5, 'poison': 0.5, 'rock': 2,
-                  'bug': 0.5, 'ghost': 0, 'steel': 2, 'psychic': 0.5,
-                  'ice': 2, 'dark': 2, 'fairy': 0.5 },
-    'FLYING':   { 'fighting': 2, 'rock': 0.5, 'bug': 2, 'steel': 0.5,
-                  'grass': 2, 'electric': 0.5 },
-    'POISON':   { 'poison': 0.5, 'ground': 0.5, 'rock': 0.5, 'ghost': 0.5,
-                  'steel': 0, 'grass': 2, 'fairy': 2 },
-    'GROUND':   { 'flying': 0, 'poison': 2, 'rock': 2, 'bug': 0.5, 'steel': 2,
-                  'fire': 2, 'grass': 0.5, 'electric': 2 },
-    'ROCK':     { 'fighting': 0.5, 'flying': 2, 'ground': 0.5, 'bug': 2,
-                  'steel': 0.5, 'fire': 2, 'ice': 2 },
-    'BUG':      { 'fighting': 0.5, 'flying': 0.5, 'poison': 0.5, 'ghost': 0.5,
-                  'steel': 0.5, 'fire': 0.5, 'grass': 2, 'psychic': 2,
-                  'dark': 2, 'fairy': 0.5 },
-    'GHOST':    { 'normal': 0, 'ghost': 2, 'psychic': 2, 'dark': 0.5 },
-    'STEEL':    { 'rock': 2, 'steel': 0.5, 'fire': 0.5, 'water': 0.5,
-                  'electric': 0.5, 'ice': 2, 'fairy': 2 },
-    'FIRE':     { 'rock': 0.5, 'bug': 2, 'steel': 2, 'fire': 0.5,
-                  'water': 0.5, 'grass': 2, 'ice': 2, 'dragon': 0.5 },
-    'WATER':    { 'ground': 2, 'rock': 2, 'fire': 2, 'water': 0.5,
-                  'grass': 0.5, 'dragon': 0.5 },
-    'GRASS':    { 'flying': 0.5, 'poison': 0.5, 'ground': 2, 'rock': 2,
-                  'bug': 0.5, 'steel': 0.5, 'fire': 0.5, 'water': 2,
-                  'grass': 0.5, 'dragon': 0.5 },
-    'ELECTRIC': { 'flying': 2, 'ground': 0, 'water': 2, 'grass': 0.5,
-                  'electric': 0.5, 'dragon': 0.5 },
-    'PSYCHIC':  { 'fighting': 2, 'poison': 2, 'steel': 0.5, 'psychic': 0.5,
-                  'dark': 0 },
-    'ICE':      { 'flying': 2, 'ground': 2, 'steel': 0.5, 'fire': 0.5,
-                  'water': 0.5, 'grass': 2, 'dragon': 2, 'ice': 0.5},
-    'DRAGON':   { 'steel': 0.5, 'dragon': 2, 'fairy': 0 },
-    'DARK':     { 'fighting': 0.5, 'ghost': 2, 'psychic': 2, 'dark': 0.5,
-                  'fairy': 0.5 },
-    'FAIRY':    { 'fighting': 2, 'poison': 0.5, 'steel': 0.5, 'fire': 0.5,
-                  'dragon': 2, 'dark': 2 }
-}
+from src.type_chart.gen_6 import damage_multiplier as damage_multiplier
 
-def _subset_gt_lt_one(damage_dict: dict[str, float], threshold: float, gt: bool = True) -> dict[str, float]:
+
+def _subset_gt_lt_one(
+    damage_dict: dict[str, float], threshold: float, gt: bool = True
+) -> dict[str, float]:
     """
     Returns a subset of the damage_dict where values are either greater than or less than the threshold.
-    
+
     :param damage_dict: Dictionary with types as keys and their respective damage multipliers as values.
     :param threshold: The threshold value to compare against.
     :param gt: If True, returns values greater than the threshold; if False, returns values less than the threshold.
@@ -57,26 +19,28 @@ def _subset_gt_lt_one(damage_dict: dict[str, float], threshold: float, gt: bool 
     else:
         return {k: v for k, v in damage_dict.items() if v < threshold}
 
+
 type_code = {
-    'NORMAL': 'NRM',
-    'FIRE': 'FIR',
-    'WATER': 'WTR',
-    'GRASS': 'GRS',
-    'BUG': 'BUG',
-    'POISON': 'PSN',
-    'ELECTRIC': 'ELC',
-    'GROUND': 'GRD',
-    'FIGHTING': 'FGT',
-    'PSYCHIC': 'PSY',
-    'ROCK': 'RCK',
-    'GHOST': 'GHT',
-    'ICE': 'ICE',
-    'DRAGON': 'DRG',
-    'DARK': 'DRK',
-    'STEEL': 'STL',
-    'FLYING': 'FLY',
-    'FAIRY': 'FRY',
+    "NORMAL": "NRM",
+    "FIRE": "FIR",
+    "WATER": "WTR",
+    "GRASS": "GRS",
+    "BUG": "BUG",
+    "POISON": "PSN",
+    "ELECTRIC": "ELC",
+    "GROUND": "GRD",
+    "FIGHTING": "FGT",
+    "PSYCHIC": "PSY",
+    "ROCK": "RCK",
+    "GHOST": "GHT",
+    "ICE": "ICE",
+    "DRAGON": "DRG",
+    "DARK": "DRK",
+    "STEEL": "STL",
+    "FLYING": "FLY",
+    "FAIRY": "FRY",
 }
+
 
 class PKType(Enum):
     NORMAL = auto()
@@ -101,10 +65,10 @@ class PKType(Enum):
     def code(self) -> str:
         return type_code[self.name]
 
-    def resistances(self) -> dict['PKType', float]:
+    def resistances(self) -> dict["PKType", float]:
         """
         Returns a dictionary of damage multipliers for this type that are less than one.
-        
+
         :return: A dictionary with types as keys and their respective damage multipliers as values.
         """
         # return {PKType[attacker]: multiplier for attacker, multiplier in mults.items() if multiplier < 1.0}
@@ -115,10 +79,10 @@ class PKType(Enum):
                 result[attacker] = mult
         return result
 
-    def weaknesses(self) -> dict['PKType', float]:
+    def weaknesses(self) -> dict["PKType", float]:
         """
         Returns a dictionary of damage multipliers for this type that are greater than one.
-        
+
         :return: A dictionary with types as keys and their respective damage multipliers as values.
         """
         mults = get_all_notable_defender_multipliers(self)
@@ -128,36 +92,47 @@ class PKType(Enum):
                 result[attacker] = mult
         return result
 
+
 def get_attack_damage_multiplier(attacker: PKType, defender: PKType) -> float:
     """
     Returns the damage multiplier for an attack from attacker_type to defender_type.
-    
+
     :param attacker_type: The type of the attacking Pokémon (PKType).
     :param defender_type: The type of the defending Pokémon (PKType).
     :return: Damage multiplier as a float.
     """
     attacker = attacker.name.upper()
     defender = defender.name.lower()
-    return damage_multiplier.get(attacker, {}).get(defender, 1.0)  # Default to 1.0 if no multiplier found
+    return damage_multiplier.get(attacker, {}).get(
+        defender, 1.0
+    )  # Default to 1.0 if no multiplier found
 
-def get_attack_damage_multiplier_or_none(attacker: PKType, defender: PKType) -> float: # Or None
+
+def get_attack_damage_multiplier_or_none(
+    attacker: PKType, defender: PKType
+) -> float:  # Or None
     """
     Returns the damage multiplier for an attack from attacker_type to defender_type, or None if not found.
-    
+
     :param attacker: The type of the attacking Pokémon (PKType).
     :param defender: The type of the defending Pokémon (PKType).
     :return: Damage multiplier as a float, or None if no multiplier is found.
     """
     attacker = attacker.name.upper()
     defender = defender.name.lower()
-    return damage_multiplier.get(attacker, {}).get(defender, None)  # Return None if no multiplier found
+    return damage_multiplier.get(attacker, {}).get(
+        defender, None
+    )  # Return None if no multiplier found
+
 
 # Flips the damage multiplier to get the defending type's perspective.
 # Flipped veresion of the get_attack_damage_multiplier function.
-def get_all_notable_defender_multipliers(defender: PKType, all: bool = False) -> dict[PKType, float]:
+def get_all_notable_defender_multipliers(
+    defender: PKType, all: bool = False
+) -> dict[PKType, float]:
     """
     Returns a dictionary of damage multipliers for a defending Pokémon type against all attacking types.
-    
+
     :param defender: The type of the defending Pokémon (PKType).
     :return: A dictionary with attacking types as keys and their respective damage multipliers as values.
     """
@@ -170,6 +145,7 @@ def get_all_notable_defender_multipliers(defender: PKType, all: bool = False) ->
     return result
     # return {attacker: get_attack_damage_multiplier(PKType[attacker], defender) for attacker in PKType.__members__}
 
+
 def test_get_resistances():
     """
     Test function to verify the get_resistances function.
@@ -181,6 +157,7 @@ def test_get_resistances():
             print(f"  {attacker.name}: {multiplier}")
         print()
 
+
 def test_enum_weaknesses_and_resistances():
     """
     Test function to verify the weaknesses and resistances of each PKType.
@@ -189,6 +166,7 @@ def test_enum_weaknesses_and_resistances():
         print(f"{type_.name} weaknesses: {type_.weaknesses()}")
         print(f"{type_.name} resistances: {type_.resistances()}")
         print()
+
 
 def combine_types_notables(type_1: PKType, type_2: PKType):
     """
@@ -210,20 +188,23 @@ def combine_types_notables(type_1: PKType, type_2: PKType):
 
     return combined
 
+
 def rank_types_and_combos_on_the_fly():
-    result : dict[str: float] = {}
+    result: dict[str:float] = {}
     for type_1 in PKType:
         if not type_1.name in result:
             result[type_1.name] = {}
             # Rank the type by its resistances to weaknesses ratio
-            result[type_1.name] = float(len(type_1.resistances())) / len(type_1.weaknesses())
+            result[type_1.name] = float(len(type_1.resistances())) / len(
+                type_1.weaknesses()
+            )
         for type_2 in PKType:
             if type_1 == type_2:
                 continue
             types = [type_1, type_2]
             # Sort to avoid duplicates like "FIRE + WATER" and "WATER + FIRE"
             types.sort(key=lambda x: x.name)
-            combo = ' + '.join([t.name for t in types])
+            combo = " + ".join([t.name for t in types])
             if combo in result:
                 continue
             if combo not in result:
@@ -234,8 +215,10 @@ def rank_types_and_combos_on_the_fly():
 
     result = dict(sorted(result.items(), key=lambda item: item[1], reverse=True))
     from json import dumps
+
     print(dumps(result, indent=4))
     return result
+
 
 class CombinedPKType:
     def __init__(self, type_1: PKType, type_2: PKType = None):
@@ -247,10 +230,10 @@ class CombinedPKType:
             types.append(type_2)
         types.sort(key=lambda x: x.name)  # Sort to ensure consistent ordering
         self.types = types
-        self.name = ' + '.join([t.name for t in types])
+        self.name = " + ".join([t.name for t in types])
         self.res = self.resistances()
         self.weak = self.weaknesses()
-    
+
     def __str__(self):
         return self.name
 
@@ -276,18 +259,22 @@ class CombinedPKType:
         ]
 
     def print_as_table_row_verbose(self):
-        resistances = ', '.join([f"{k.name} ({v})" for k, v in self.resistances().items()])
-        weaknesses = ', '.join([f"{k.name} ({v})" for k, v in self.weaknesses().items()])
+        resistances = ", ".join(
+            [f"{k.name} ({v})" for k, v in self.resistances().items()]
+        )
+        weaknesses = ", ".join(
+            [f"{k.name} ({v})" for k, v in self.weaknesses().items()]
+        )
         return f"{self.ratio():<5.2f} | {self.name:<20} | {len(self.resistances()):<4} | {len(self.weaknesses()):<4} | {resistances:<59} | {weaknesses:<30}"
 
     def print_as_table_row_quiet(self):
-        resistances = ', '.join([f"{k.name}" for k in self.resistances().keys()])
-        weaknesses = ', '.join([f"{k.name}" for k in self.weaknesses().keys()])
+        resistances = ", ".join([f"{k.name}" for k in self.resistances().keys()])
+        weaknesses = ", ".join([f"{k.name}" for k in self.weaknesses().keys()])
         return f"{self.ratio():<5.2f} | {self.name:<20} | {len(self.resistances()):<4} | {len(self.weaknesses()):<4} | {resistances:<59} | {weaknesses:<30}"
 
     def print_as_table_row_codes(self):
-        resistances = ', '.join([f"{k.code()}" for k in self.resistances().keys()])
-        weaknesses = ', '.join([f"{k.code()}" for k in self.weaknesses().keys()])
+        resistances = ", ".join([f"{k.code()}" for k in self.resistances().keys()])
+        weaknesses = ", ".join([f"{k.code()}" for k in self.weaknesses().keys()])
         return f"{self.ratio():<5.2f} | {self.name:<20} | {len(self.resistances()):<4} | {len(self.weaknesses()):<4} | {resistances:<59} | {weaknesses:<30}"
 
     @staticmethod
@@ -305,11 +292,11 @@ class CombinedPKType:
                 combo = CombinedPKType(type_1, type_2)
                 all.add(combo)
         all = list(all)
-        if sort == 'res':
+        if sort == "res":
             all.sort(key=lambda x: len(x.res), reverse=True)
-        elif sort == 'weak':
+        elif sort == "weak":
             all.sort(key=lambda x: len(x.weak))
-        else:  #sort in [None, 'ratio', 'rank']:
+        else:  # sort in [None, 'ratio', 'rank']:
             all.sort(key=lambda x: x.ratio(), reverse=True)
         return all
 
@@ -321,15 +308,15 @@ class CombinedPKType:
             filter: all results will include this type
             sort: 'res' for most resistances, 'weak' for least weaknesses; defaults to best ration of res/weak.
         """
-        print(f"{'#':<4} | ", end='')
+        print(f"{'#':<4} | ", end="")
         print(CombinedPKType.header())
-        print('-' * 123)
+        print("-" * 123)
         all = CombinedPKType.all_combos(sort)
-        combo : CombinedPKType
-        for i, combo in enumerate(all ,1):
+        combo: CombinedPKType
+        for i, combo in enumerate(all, 1):
             if filter and filter not in combo.types:
                 continue
-            print(f'{i:<4} | ', end='')
+            print(f"{i:<4} | ", end="")
             # print(combo.print_as_table_row_verbose())
             # print(combo.print_as_table_row_quiet())
             print(combo.print_as_table_row_codes())
@@ -375,6 +362,7 @@ def rank_all_types_and_combined_types():
 
     result = dict(sorted(result.items(), key=lambda item: item[1], reverse=True))
     from json import dumps
+
     print(dumps(result, indent=4))
     return result
 
@@ -389,5 +377,5 @@ if __name__ == "__main__":
     # Big print.
     CombinedPKType.print_all_types_and_combos(
         filter=PKType.NORMAL,
-        sort='weak'  # None=Rank, 'res'=#Resistances desc, 'weak'=#Weaknesses asc.
+        sort="weak",  # None=Rank, 'res'=#Resistances desc, 'weak'=#Weaknesses asc.
     )

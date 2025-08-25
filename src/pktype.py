@@ -4,6 +4,9 @@ Enum for each Pokemon type.
 
 from enum import Enum, auto
 
+from type_chart.util import get_attack_damage_multiplier
+
+
 type_code = {
     "NORMAL": "NRM",
     "FIRE": "FIR",
@@ -90,7 +93,7 @@ def get_all_notable_defender_multipliers(
     """
     result = {}
     for attacker in PKType:
-        multiplier = get_attack_damage_multiplier(attacker, defender)
+        multiplier = get_attack_damage_multiplier(attacker.name, defender.name)
         if all or (multiplier != 1.0):
             # Only include types that have a multiplier other than 1.0
             result.update({attacker: multiplier})
@@ -98,16 +101,11 @@ def get_all_notable_defender_multipliers(
     # return {attacker: get_attack_damage_multiplier(PKType[attacker], defender) for attacker in PKType.__members__}
 
 
-def get_attack_damage_multiplier(attacker: PKType, defender: PKType) -> float:
+def test_enum_weaknesses_and_resistances():
     """
-    Returns the damage multiplier for an attack from attacker_type to defender_type.
-
-    :param attacker_type: The type of the attacking Pokémon (PKType).
-    :param defender_type: The type of the defending Pokémon (PKType).
-    :return: Damage multiplier as a float.
+    Test function to verify the weaknesses and resistances of each PKType.
     """
-    attacker = attacker.name.upper()
-    defender = defender.name.lower()
-    return damage_multiplier.get(attacker, {}).get(
-        defender, 1.0
-    )  # Default to 1.0 if no multiplier found
+    for type_ in PKType:
+        print(f"{type_.name} weaknesses: {type_.weaknesses()}")
+        print(f"{type_.name} resistances: {type_.resistances()}")
+        print()

@@ -1,5 +1,5 @@
 """
-Class that take into account mono-typing and duo-typing.
+Class that takes into account mono-typing and duo-typing.
 """
 from pktype import PKType, get_all_notable_defender_multipliers
 

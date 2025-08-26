@@ -5,12 +5,13 @@ Source: https://bulbapedia.bulbagarden.net/wiki/Type/Type_chart
 Contains a damage multiplier lookup dictionary.
 Form:
 {
-    attack type (str): {defending type : multiplier (float), ...},
+    attack type (str): {defending type (str) : multiplier (float), ...},
     ...
 }
 (!) Lookup the defending type with .get(); if None is returned,
 then there is no special case and the multiplier is assumed to be 1x.
 """
+
 
 damage_multiplier = {
     "NORMAL": {"ghost": 0, "rock": 0.5, "steel": 0.5},
